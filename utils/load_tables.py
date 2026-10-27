@@ -29,4 +29,4 @@ class tables_load():
                 print('==='*50)
                 print(f'linhas: {df.shape[0]}')
                 print(f'colunas: {df.shape[1]}')
-            return df.set_index(['id_cliente', 'id_contrato'])
+            return df
