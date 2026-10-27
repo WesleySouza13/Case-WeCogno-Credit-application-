@@ -4,4 +4,4 @@
 mlflow.db
 mlruns
 *.db
-*.parquet
+
