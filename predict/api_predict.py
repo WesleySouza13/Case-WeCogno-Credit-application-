@@ -13,4 +13,5 @@ def model_predict(X:pd.DataFrame):
     model = mlflow.sklearn.load_model("models:/modelo_para_producao@champion")
 
     return model.predict_proba(X)[:, 1]
+
 # %%

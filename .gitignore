@@ -1,9 +1,8 @@
 .vscode
 **__pycache__
 .venv
-mlflow.db
 mlruns
-*.db
+CreditDatabase.db
 *parquet
 !data/
 !data/raw/
