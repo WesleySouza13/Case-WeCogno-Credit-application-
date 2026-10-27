@@ -4,11 +4,12 @@ from pathlib import Path
 class tables_load():
     def __init__(self):
         self.base_dir = Path(__file__).resolve().parent.parent
+        self.data_dir = self.base_dir / 'data' / 'raw'
 
     def table_base_cadastral(self, verbose=True):
-        data_path = self.base_dir / 'data' / 'raw' / 'base_cadastral.parquet'
+        data_path = self.data_dir/'base_cadastral.parquet'
         if not data_path.is_file():
-            raise FileNotFoundError('Arquivo nao encontrado')
+            raise FileNotFoundError(f'Arquivo nao encontrado - {data_path}')
         df = pd.read_parquet(data_path)
         if verbose:
             print('==='*50)
@@ -19,9 +20,9 @@ class tables_load():
         return df.set_index('id_cliente')
         
     def table_base_emprestimos(self, verbose=True):
-            data_path = self.base_dir / 'data' / 'raw' / 'base_cadastral.parquet'
+            data_path = self.data_dir/'historico_emprestimos.parquet'
             if not data_path.is_file():
-                        raise FileNotFoundError('Arquivo nao encontrado')
+                    raise FileNotFoundError(f'Arquivo nao encontrado - {data_path}')
             df = pd.read_parquet(data_path)
             if verbose:
                 print('==='*50)
