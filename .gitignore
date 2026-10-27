@@ -4,4 +4,8 @@
 mlflow.db
 mlruns
 *.db
-
+*parquet
+!data/
+!data/raw/
+!data/raw/base_cadastral.parquet
+!data/raw/historico_emprestimos.parquet
