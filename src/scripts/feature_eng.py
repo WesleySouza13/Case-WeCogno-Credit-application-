@@ -81,6 +81,8 @@ def col_transform(data:pd.DataFrame):
     df_merge['aposentado'] = np.where(df_merge['tipo_renda']=='aposentado',1,0)
     df_merge['servidor_publico'] = np.where(df_merge['tipo_renda']=='servidor público',1,0)
     df_merge['nota_max_regiao_cliente'] = np.where(df_merge['nota_regiao_cliente']>=3,1,0)
+    # substituindo possiveis horas nulas pela mediana do treino
+    df_merge['hora_solicitacao'] = df_merge['hora_solicitacao'].fillna(12.0)
     hora = df_merge['hora_solicitacao']
     df_merge['periodo_dia'] = np.select([hora.between(0, 5).fillna(False).to_numpy(dtype=bool),hora.between(6, 11).fillna(False).to_numpy(dtype=bool),hora.between(12, 17).fillna(False).to_numpy(dtype=bool),
             hora.between(18, 23).fillna(False).to_numpy(dtype=bool)],['madrugada', 'manha', 'tarde', 'noite'],default=None)
@@ -96,8 +98,12 @@ def col_transform(data:pd.DataFrame):
         print('----'*50)
     df_merge['tipo_renda'] = df_merge['tipo_renda'].str.lower()
     # tratando linhas com possiveis inf 
-    df_merge['prazo_implicito'] = np.where(df_merge['prazo_implicito']==np.inf,df_merge['prazo_implicito'].median(), df_merge['prazo_implicito'] )
+    df_merge['prazo_implicito'] = np.where(df_merge['prazo_implicito']==np.inf,np.nan, df_merge['prazo_implicito'])
     df_merge.loc[df_merge['renda_anual'] < 0,'renda_anual'] *= -1    
+    df_merge['ocupacao'] = df_merge['ocupacao'].fillna('Não informado')
+    print("Nulos antes:", df_merge['hora_solicitacao'].isna().sum())
+
+    
     return df_merge
 
 # Identifica colunas terminadas em _x
@@ -123,6 +129,7 @@ df_final = df_final[['dia_semana_solicitacao', 'hora_solicitacao', 'tipo_contrat
         'valor_bem_maior_que_renda', 'diff_valor_bem_credito',
         'renda_per_capta', 'flag_sem_filhos', 'aposentado', 'servidor_publico',
         'nota_max_regiao_cliente', 'periodo_dia', 'flag_final_de_semana']]
+
 # %%
 path_data = os.path.join('..', '..', 'data', 'processed', 'base_submissao_tratada.parquet')
 df_final.to_parquet(path_data)
